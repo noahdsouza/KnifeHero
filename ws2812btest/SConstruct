@@ -15,10 +15,18 @@ list = Builder(action = 'xc16-objdump -S -D $SOURCE > $TARGET',
                src_suffix = 'elf')
 env.Append(BUILDERS = {'List' : list})
 
-env.Program('ws2812btest', ['ws2812btest.c',
+# env.Program('ws2812btest', ['ws2812btest.c',
+#                             'descriptors.c',
+#                             '../lib/usb.c',
+#                             'ws2812b.c',
+#                             '../lib/elecanisms.c'])
+# env.Hex('ws2812btest')
+# env.List('ws2812btest')
+
+env.Program('gametest', ['gametest.c',
                             'descriptors.c',
                             '../lib/usb.c',
                             'ws2812b.c',
                             '../lib/elecanisms.c'])
-env.Hex('ws2812btest')
-env.List('ws2812btest')
+env.Hex('gametest')
+env.List('gametest')

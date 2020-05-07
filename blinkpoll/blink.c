@@ -41,21 +41,45 @@ int16_t main(void) {
     LED2 = ON;
 
     while (1) {
-        // if (IFS0bits.T1IF == 1) {
-        //     IFS0bits.T1IF = 0;      // lower Timer1 interrupt flag
-        //     LED2 = !LED2;           // toggle LED2
-        // }
-        // D10 = (SW2 == 0) ? 0 : 1;   // turn LED1 on if SW2 is pressed
-        // LED3 = (SW3 == 0) ? ON : OFF;   // turn LED3 on if SW3 is pressed
-        // // D10 = (SW2 == 0) ? 1 : 0;   // turn LED1 on if SW2 is pressed
-        // // D11 = (SW3 == 0) ? 1 : 0;   // turn LED3 on if SW3 is pressed
-        // // D13 = ON;
+        if (IFS0bits.T1IF == 1) {
+            IFS0bits.T1IF = 0;      // lower Timer1 interrupt flag
+            LED2 = !LED2;           // toggle LED2
+        }
+        D10 = (SW2 == 0) ? 1 : 0;
+        LED3 = (SW2 == 0) ? ON : OFF;   // turn LED3 on if SW3 is pressed
+
+        // D10 = (SW2 == 0) ? 1 : 0;   // turn LED1 on if SW2 is pressed
+        // D11 = (SW3 == 0) ? 1 : 0;   // turn LED3 on if SW3 is pressed
+        // D13 = ON;
 
     }
 }
 
 
-
+// while(1) {
+//   // clear_leds();
+//   if (IFS0bits.T1IF == 1) {
+//     IFS0bits.T1IF = 0;
+//     if (n==0) {
+//       for(i = 0; i < NUM_LEDS; i++) {
+//         red[i] = 80;
+//         green[i] = 0;
+//         blue[i] = 0;
+//       }
+//       n = 1;
+//       write_leds();
+//     } else {
+//       for(i = 0; i < NUM_LEDS; i++) {
+//         red[i] = 0;
+//         green[i] = 0;
+//         blue[i] = 80;
+//       }
+//       n = 0;
+//       i=0;
+//       write_leds();
+//     }
+//   }
+// }
 
 
 

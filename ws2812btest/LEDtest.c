@@ -35,10 +35,9 @@
 //Define the array of leds
 uint8_t red[NUM_LEDS], green[NUM_LEDS], blue[NUM_LEDS];     //Three different arrays for every color
 
-
+// HELPERS??
 void write_leds(void) {
   uint16_t i;
-
   disable_interrupts();
   for(i = 0; i < NUM_LEDS; i++) {
     ws2812b_write(red[i], green[i], blue[i]);
@@ -46,18 +45,93 @@ void write_leds(void) {
   enable_interrupts();
 }
 
+void clear_leds(void) {
+  uint16_t i;
+  disable_interrupts();
+  for(i = 0; i < NUM_LEDS; i++) {
+    ws2812b_write(red[0], green[0], blue[0]);
+  }
+  enable_interrupts();
+}
+
 ////MAIN FUNCTION////
 int16_t main(void)  {
   init_elecanisms();
-  D0_OD = 1;        //Open drain data pin
+  // D0_OD = 1;        //Open drain data pin
+
+  T1CON = 0x0030;         // set Timer1 period to 0.5s
+  PR1 = 0x7A11;
+  TMR1 = 0;               // set Timer1 count to 0
+  IFS0bits.T1IF = 0;      // lower Timer1 interrupt flag
+  T1CONbits.TON = 1;      // turn on Timer1
+
+  D0 = 1;
   init_ws2812b();
 
+  D10_DIR = OUT;
+  D10 = 1;
+
+  LED2 = ON;
+
   uint16_t i;
-  for(i = 0; i < NUM_LEDS; i++) {
-    red[i] = 0;
-    green[i] = 128;
-    blue[i] = 0;
+
+  // for(i = 0; i < NUM_LEDS; i++) {
+  //   red[i] = 80;
+  //   green[i] = 0;
+  //   blue[i] = 0;
+  // }
+  uint16_t n;
+  n=0;
+  while(1) {
+    // clear_leds();
+    if (IFS0bits.T1IF == 1) {
+      IFS0bits.T1IF = 0;
+      if (n==0) {
+        for(i = 0; i < NUM_LEDS; i++) {
+          red[i] = 80;
+          green[i] = 0;
+          blue[i] = 0;
+        }
+        n = 1;
+        write_leds();
+      } else {
+        for(i = 0; i < NUM_LEDS; i++) {
+          red[i] = 0;
+          green[i] = 0;
+          blue[i] = 80;
+        }
+        n = 0;
+        i=0;
+        write_leds();
+      }
+    }
   }
-  write_leds();
-  while(1) {}
 }
+
+// if (SW2 == 0) {
+//   red[1] = 80;
+//   green[1] = 0;
+//   blue[1] = 0;
+//   red[2] = 0;
+//   green[2] = 80;
+//   blue[2] = 0;
+//   red[3] = 0;
+//   green[3] = 0;
+//   blue[3] = 80;
+//   write_leds();
+//   LED3 = ON;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sad
